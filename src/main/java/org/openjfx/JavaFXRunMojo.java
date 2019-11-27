@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openjfx;
 
 import org.apache.commons.exec.CommandLine;
@@ -46,8 +45,9 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
 
     /**
      * <p>
-     * The executable. Can be a full path or the name of the executable. In the latter case, the executable must be in
-     * the PATH for the execution to work.
+     * The executable. Can be a full path or the name of the executable. In the
+     * latter case, the executable must be in the PATH for the execution to
+     * work.
      * </p>
      */
     @Parameter(property = "javafx.executable", defaultValue = "java")
@@ -55,7 +55,7 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
 
     public void execute() throws MojoExecutionException {
         if (skip) {
-            getLog().info( "skipping execute as per configuration" );
+            getLog().info("skipping execute as per configuration");
             return;
         }
 
@@ -64,7 +64,7 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
         }
 
         if (basedir == null) {
-            throw new IllegalStateException( "basedir is null. Should not be possible." );
+            throw new IllegalStateException("basedir is null. Should not be possible.");
         }
 
         try {
@@ -85,8 +85,8 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
             try {
                 int resultCode;
                 if (outputFile != null) {
-                    if ( !outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-                        getLog().warn( "Could not create non existing parent directories for log file: " + outputFile );
+                    if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
+                        getLog().warn("Could not create non existing parent directories for log file: " + outputFile);
                     }
 
                     FileOutputStream outputStream = null;
@@ -119,8 +119,6 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
 
     }
 
-
-
     private void handleArguments(List<String> commandArguments) throws MojoExecutionException, MojoFailureException {
         preparePaths();
 
@@ -131,7 +129,9 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
                     .map(String.class::cast)
                     .forEach(commandArguments::add);
         }
-
+        if (commandlineArgs != null) {
+            commandArguments.add(commandlineArgs);
+        }
         if (modulepathElements != null && !modulepathElements.isEmpty()) {
             commandArguments.add(" --module-path");
             String modulePath = StringUtils.join(modulepathElements.iterator(), File.pathSeparator);
@@ -174,13 +174,9 @@ public class JavaFXRunMojo extends JavaFXBaseMojo {
             }
         }
 
-        if (commandlineArgs != null) {
-            commandArguments.add(commandlineArgs);
-        }
     }
 
     // for tests
-
     void setExecutable(String executable) {
         this.executable = executable;
     }
